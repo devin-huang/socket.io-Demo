@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>{{roomID}}</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body>
+  <div class="dn-row">
+    <div class="col-dn-6"> <label>昵称</label><span class="userName"></span> </div>
+    <div class="col-dn-6"> <label>房间</label><span>{{roomID}}</span> </div>
+    <div class="col-dn-6"> <label>在线人数</label><span class="count">{{users.length}}</span> </div>
+    <div class="col-dn-6"> <label>在线用户</label><span class="users">{{users}}</span> </div>
+  </div>
+
+
+  <div class="msglog"></div>
+  <textarea name="message" class="messageInput"></textarea>
+  
+  <div class="dn-row">
+    <div class="col-dn-6"> <button class="btn btn-send" id="">发送信息 ( 或者按Enter键发送 )</button> </div>
+    <div class="col-dn-6"> <button class="btn joinOrLeave">退出房间</button> </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/jquery.js"></script>
+  <script>
+    $(function () {
+      // ----------设置昵称-------------
+      var userName = '';
+      while ($('.userName').text().trim() === '') {
+        userName = prompt("请设置你的昵称","");
+        if(!userName){
+          var date = new Date();
+          userName = +date;
+        }
+        $('.userName').text(userName);
+      }
+
+
+      // ---------创建连接-----------
+      var socket = io();
+
+      socket.on('connect', function () {
+        // 触发后端 加入房间 事件
+        socket.emit('join', userName);
+
+        id =  socket.id;
+        console.log(id);
+
+        $('.disconnect').remove();
+      });
+
+      // 监听消息
+      socket.on('msg', function (obj, msg) {
+        var state   = ( obj.state ) ? 'fa-check-circle' : 'fa-times-circle';
+        var isSelf  = (obj.user === userName) ? 'currenty' : '' ;
+        var message = '' +
+            '<div class="message">' +
+            '  <span class="user">' + obj.user + ': </span>' +
+            '  <span class="msg '+ isSelf + '">' + msg + '</span>' +
+            '  <span class="time">' + obj.intoTime + '</span>' +
+            '  <span class="fa ' + state + '"></span>' +
+            '</div>';
+        $('.msglog').append(message);
+        // 滚动条保持最下方
+        $('.msglog').scrollTop($('.msglog')[0].scrollHeight);  
+      });
+
+      // 监听系统消息
+      socket.on('sys', function (sysMsg, state, users) {
+        var message = '<div class="sysMsg ' + state + '">' + sysMsg + '</div>';
+        $('.msglog').append(message);
+
+        $('.count').text(users.length);
+        $('.users').text(users);
+      });
+
+      // 断开连接
+      socket.on('disconnect', (reason) => {
+        $('body').prepend('<p class="disconnect" style="color:red"> DISCONNECT:'+reason+'<br/><span></span></p>');
+      });
+
+      //正在连接中
+      socket.on('reconnecting', (attemptNumber) => {
+        if(attemptNumber>20){
+          socket.on('reconnect_failed', () => {
+              alert('failed')
+          });
+        }
+        $('.disconnect > span').empty().text('reconnecting...'+attemptNumber);
+      });
+
+      //成功重连
+      socket.on('reconnection', (isLink) => {
+          console.log(isLink)
+          if(isLink){
+              console.log('OK');
+              //重连后判断是否还是同一窗口(具体还没实操);
+              if(id == socket.id){
+                  console.log(id)                
+              }
+          }
+      });
+
+      // 发送消息
+      $('.messageInput').bind('keydown ', function(event) {
+        if (event.which === 13) {
+          event.preventDefault();
+          setInput.call(this,$(this));
+        }
+      });
+
+      $(".btn-send").bind('click ', function(event) {
+          event.preventDefault();
+          setInput.call(this,$('.messageInput'));
+      });
+
+
+      // 退出房间
+      $('.joinOrLeave').click(function () {
+        if ($(this).text() === '退出房间') {
+          $(this).text('进入房间');
+          socket.emit('leave');
+          var msg = '你已经退出了房间,重新发言请点击"进入房间"';
+          $('.msglog').append('<div class="sysMsg remove">'+msg+'</div>');
+        } else {
+          $(this).text('退出房间');
+          socket.emit('join', userName);
+        }
+      });
+
+      function setInput(obj){
+        var msg =obj.val();
+        obj.val('');
+        socket.send(msg);
+      }
+    });
+  </script>
+</body>
+</html>

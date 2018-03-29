@@ -1,0 +1,102 @@
+
+    body,*{
+      box-sizing:border-box;
+      -moz-box-sizing:border-box; /* Firefox */
+      -webkit-box-sizing:border-box; /* Safari */
+      font-family: "Microsoft YaHei","Arial","ºÚÌå","ËÎÌå",sans-serif;
+    }
+    ::-webkit-scrollbar  
+    {  
+        width: 10px;  
+        height: 8px;  
+        background-color: #F5F5F5;  
+    }  
+      
+    ::-webkit-scrollbar-track  
+    {  
+        -webkit-box-shadow: inset 0 0 6px rgba(51, 51, 51, 0.1);  
+        border-radius: 10px;  
+        background-color: #F5F5F5;  
+    }  
+      
+    ::-webkit-scrollbar-thumb  
+    {  
+        border-radius: 10px;  
+        -webkit-box-shadow: inset 0 0 6px rgba(51, 51, 51, 0.1);  
+        background-color: rgba(204, 204, 204, .6); 
+    }
+    .dn-row{
+      overflow: hidden;
+    }
+    .col-dn-6{
+      float: left;
+      width:50%;
+      padding: 5px;
+    }
+    .col-dn-6 label{
+      display: inline-block;
+      width: 15%;
+    }
+    .col-dn-6 span{
+      color:#03a9f4;
+      border-radius: 2px;
+      padding: 2px 5px;
+    }
+    .msglog, .messageInput {
+      border: 1px solid #ccc;
+      height: 350px;
+      overflow-y: auto;
+      font-size: 14px;
+      padding: 15px 5px;
+      border-radius: 5px 5px 0px 0px;
+    }
+    .messageInput {
+      min-height: 80px;
+      border-top: none;
+      height: 80px;
+      width: 100%;
+      border-radius: 0px 0px 5px 5px;
+    }
+    .message .msg{
+      border : #ccc solid thin;
+      padding: 5px;
+      border-radius: 5px;
+    }
+    .message .msg.currenty{
+      background-color:#cddc39;
+    }
+    .message {
+      padding-top:10px; 
+      padding-bottom:10px;
+    }
+    .message .user {
+      padding-right: 5px;
+      padding-left: 5px;
+      color: brown;
+    }
+    .message .time{
+      float: right;
+      color:#ccc;
+    }
+    .sysMsg {
+      color: #c1bfbf;
+      padding-right: 5px;
+      padding-left: 5px;
+      font-size: 12px;
+      text-align: center;
+    }
+    .sysMsg.add{
+      color:#03a9f4;
+    }
+    .sysMsg.remove{
+      color:#f44336;
+    }
+    .btn{
+      border:thin solid #ccc;
+      background-color: #03a9f4;
+      display: block;
+      height: 45px;
+      cursor: pointer;
+      color:white;
+      width:100%;
+    }

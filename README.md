@@ -1,4 +1,4 @@
-文章：[http://www.jianshu.com/p/40d8bc17529f](http://www.jianshu.com/p/40d8bc17529f)
+文章 [https://github.com/devin-huang/socket.io-Demo](https://github.com/devin-huang/socket.io-Demo)
 
 # 运行效果
 

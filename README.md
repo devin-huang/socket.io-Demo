@@ -2,8 +2,8 @@
 
 # 运行效果
 
-![](/images/websocket-main.jpg)
+![](https://github.com/devin-huang/devin-huang.github.io/raw/master/img/pubilc/websocket-main.jpg)
 
-![](/images/websocket-room-list.jpg)
+![](https://github.com/devin-huang/devin-huang.github.io/raw/master/img/pubilc/websocket-room-list.jpg)
 
 
